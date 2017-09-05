@@ -1,6 +1,6 @@
 #|
 exec /usr/local/bin/sbcl --script "$0" "$@"
-exec /usr/local/bin/sbcl --noinform --non-interactive --load "$0" "$@"
+; or use following instead: exec /usr/local/bin/sbcl --noinform --non-interactive --load "$0" "$@"
 |#
 
 (load "/home/kaw/lang/lisp/argfiles.lisp")
@@ -10,9 +10,9 @@ exec /usr/local/bin/sbcl --noinform --non-interactive --load "$0" "$@"
       #'(lambda (line)
           (format t "~5D ~:@(~A~)~%" ln line)
           (incf ln))
-    :prefunc
+    :prefile
     #'(lambda (fname)
         (format t "====[ ~A ]================~%" (or fname "*STDIN*")))
-    :endfunc
+    :end
     #'(lambda ()
         (format t "==========================~%"))))

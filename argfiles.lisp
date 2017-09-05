@@ -5,17 +5,17 @@
 
 (in-package :argfiles)
 
-(defun with-argfiles (linefunc &key beginfunc prefunc postfunc endfunc)
- (and beginfunc (funcall beginfunc))
+(defun with-argfiles (linefunc &key begin prefile postfile end)
+ (and begin (funcall begin))
   (labels ((argfile (st fname)
              (when (streamp st)
-               (and prefunc (funcall prefunc fname))
+               (and prefile (funcall prefile fname))
                (loop
                   for line = (read-line st nil nil)
                   while line
                   do
                     (funcall linefunc line))
-               (and postfunc (funcall postfunc fname)))))
+               (and postfile (funcall postfile fname)))))
     (if (cdr sb-ext:*posix-argv*)
         (mapcar #'(lambda (fname)
                     (if (string= fname "-")
@@ -27,4 +27,4 @@
                           (argfile st fname))))
                 (cdr sb-ext:*posix-argv*))
         (argfile *standard-input* nil)))
-  (and endfunc (funcall endfunc)))
+  (and end (funcall end)))
